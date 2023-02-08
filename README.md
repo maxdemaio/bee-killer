@@ -4,6 +4,14 @@ solving the NYT spelling bee
 
 ---
 
+to start, we generate a binary structure that maps each dictionary word to a 32-bit binary representation of itself:
+
+```
+tac (example word from dict)
+19 0 2
+00000010000000000000000000000101
+```
+
 with the given letters and the required letter we create a solution cypher:
 
 ```
@@ -15,28 +23,20 @@ cats (letters given, c is the required letter)
 11111100111111111111111111111010
 ```
 
-compare the solution cypher to each word in the dictionary:
-
-```
-tac (example word from dict)
-19 0 2
-00000010000000000000000000000101
-```
-
-two step verification:
+compare the solution cypher to each word in our binary structure we generated with a two step verification process:
 
 - tac && !cats = 0
 - then check if the position at the required bit is 1
 
 usage:
 
-compile binary for your platform
+in the `main()` function: uncomment the `makeWordBinaryMap()` function, comment out everything else in the `main()` function, and compile the binary structure for your platform:
 
 ```
 gcc bee-killer.c
 ```
 
-execute the project
+comment out the `makeBinaryMap()`, uncomment everything else in the `main()` function, and execute the project
 
 ```
 ./a.out cats c
