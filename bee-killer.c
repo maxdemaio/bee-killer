@@ -18,20 +18,28 @@ void solve(char *letters, char required_letter);
 void makeWordBinaryMap();
 
 void makeWordBinaryMap() {
+    // if the binary file already exists, return so we don't regenerate
+    FILE *binary_file_r = fopen("word_bin_map.bin", "rb");
+    if (binary_file_r != NULL) {
+      fclose(binary_file_r);
+      return;
+    }
+
     struct WordBinaryMap word_binaries[MAX_WORDS];
     int num_words = 0;
 
     // open the dictionary
-    // note: dictionary was lowercased and removed entries < 4 letters
-    FILE *file = fopen("dict.txt", "r");
-    if (!file) {
+    // note: small_dictionary.txt is used in this example
+    // but, feel free to use a real dictionary similar to curate.py
+    FILE *dict_file = fopen("small_dictionary.txt", "r");
+    if (!dict_file) {
         perror("Failed to open dictionary file");
         return;
     }
 
     // iterate over each word in the dictionary
     char word[32];
-    while (fscanf(file, "%s", word) != EOF) {
+    while (fscanf(dict_file, "%s", word) != EOF) {
         uint32_t binary_word = 0;
 
         // convert the word to its 32-bit representation
@@ -45,14 +53,14 @@ void makeWordBinaryMap() {
         num_words++;
     }
 
-    // open the binary file for writing
-    FILE *binary_file = fopen("word_bin_map.bin", "wb");
+    // create the binary file for writing
+    FILE *binary_file_w = fopen("word_bin_map.bin", "wb");
 
     // write the array of structs to the binary file
-    fwrite(word_binaries, sizeof(struct WordBinaryMap), num_words, binary_file);
+    fwrite(word_binaries, sizeof(struct WordBinaryMap), num_words, binary_file_w);
 
-    fclose(binary_file);
-    fclose(file);
+    fclose(binary_file_w);
+    fclose(dict_file);
 }
 
 uint32_t makeCypher(char *letters) {
@@ -88,7 +96,7 @@ void solve(char *letters, char required_letter) {
 }
 
 int main(int argc, char *argv[]) {
-  //makeWordBinaryMap();
+  makeWordBinaryMap();
 
   if (argc != 3) {
     printf("usage: %s <string> <character>\n", argv[0]);
@@ -103,7 +111,7 @@ int main(int argc, char *argv[]) {
   char *letters = argv[1];
   char required_letter = argv[2][0];
 
-  
+
   solve(letters, required_letter);
   return 0;
 }

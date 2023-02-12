@@ -30,16 +30,9 @@ compare the solution cypher to each word in our binary structure we generated wi
 
 usage:
 
-in the `main()` function: uncomment the `makeWordBinaryMap()` function, comment out everything else in the `main()` function, and compile the binary structure for your platform:
-
 ```
 gcc bee-killer.c
-```
-
-comment out the `makeBinaryMap()`, uncomment everything else in the `main()` function, and execute the project
-
-```
 ./a.out cats c
 ```
 
-note: once you compile the binary structure once, you can re-use it against any combination of words and required letter you'd like.
+note: the binary structure is created once! we re-use it against any combination of words and required letter provided.
